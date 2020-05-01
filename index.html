@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>spritesheet animator</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <script src="scripts/app.js" type="module"></script>
+</head>
+
+<body>
+    <div id="toolbox">
+        <div>
+            <label for="spritesheet-select">Sprite Sheet</label>
+            <select id="spritesheet-select"></select>
+        </div>
+        <div>
+            <label for="animation-select">Animation</label>
+            <select id="animation-select"></select>
+        </div>
+    </div>
+
+    <div>
+        <h3>Animation</h3>
+        <canvas id="animation-canvas"></canvas>
+        <p id="animation-frame-information-text"></p>
+    </div>
+
+    <div>
+        <h3>Sprite Sheet</h3>
+        <img id="spritesheet-preview" />
+    </div>
+</body>
+
+</html>
