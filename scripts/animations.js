@@ -48,17 +48,28 @@ export class AnimationPlayer {
     animation;
 
     cursor;
+    remainingFrameDuration;
 
     constructor(animation, settings) {
         if (!animation) throw new Error("animation argument must be defined");
         this.animation = animation;
         this.settings = settings || new AnimationSettings();
         this.cursor = 0;
+        this.remainingFrameDuration = this.getCurrentFrame().duration;
     }
 
-    update(dt) {
+    promoteCursor() {
         this.cursor += 1;
         this.cursor %= this.animation.frames.length;
+    }
+
+    // update, dt in millis
+    update(dt) {
+        this.remainingFrameDuration -= dt;
+        while (this.remainingFrameDuration < 0) {
+            this.promoteCursor();
+            this.remainingFrameDuration += this.getCurrentFrame().duration;
+        }
     }
 
     getCurrentFrame() {

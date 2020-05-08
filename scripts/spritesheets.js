@@ -20,13 +20,26 @@ function createCompleteAnimation(sprites, evenDuration) {
 }
 
 function createDwarfSpriteSheet() {
-    const size = new Vec2(36, 36);
+    const rows = 16;
+    const cols = 8;
+
+    const size = new Vec2(38, 32);
     let sprites = [];
-    for (let row = 0; row < 16; ++row) {
-        for (let col = 0; col < 8; ++col) {
-            const position = new Vec2(col * size.x, row * size.y);
+    for (let row = 0; row < rows; ++row) {
+        for (let col = 0; col < cols; ++col) {
+            const position = new Vec2(col * size.x, row * size.y + 2);
             sprites.push(new Sprite(position, size));
         }
+    }
+
+    function createRow(row, count, durations) {
+        const animations = [];
+        for (let idx = 0; idx < count; ++idx) {
+            const duration = durations.hasOwnProperty('length') ? durations[idx] : durations;
+            const frame = new AnimationFrame(row * cols + idx, duration)
+            animations.push(frame);
+        }
+        return new Animation(animations);
     }
 
     return {
@@ -34,7 +47,12 @@ function createDwarfSpriteSheet() {
         uri: "resources/dwarf.png",
         sprites,
         animations: {
-            complete: createCompleteAnimation(sprites, .3),
+            'idle': createRow(0, 5, 150),
+            'walk': createRow(1, 8, 150),
+            'high attack': createRow(2, 7, 120),
+            'middle attack': createRow(3, 6, [500, 150, 100, 50, 50, 150]),
+            'jump': createRow(5, 4, [150, 150, 200, 200]),
+            complete: createCompleteAnimation(sprites, 150),
         }
     }
 }
@@ -62,51 +80,50 @@ function createNinjaSpriteSheet() {
     }
 
 
-
     return {
         name: "ninja",
         uri: "resources/ninja.png",
         sprites,
         animations: {
-            complete: createCompleteAnimation(sprites, .3),
-            idle: new Animation([
-                new AnimationFrame(0, .3),
-                new AnimationFrame(1, .3),
-                new AnimationFrame(2, .3),
-                new AnimationFrame(3, .3),
-            ]),
-            run: new Animation([
-                new AnimationFrame(0 + 1 * rows, .3),
-                new AnimationFrame(1 + 1 * rows, .3),
-                new AnimationFrame(2 + 1 * rows, .3),
-                new AnimationFrame(3 + 1 * rows, .3),
-                new AnimationFrame(4 + 1 * rows, .3),
-                new AnimationFrame(5 + 1 * rows, .3),
+            attack: new Animation([
+                new AnimationFrame(0 + 3 * rows, 300),
+                new AnimationFrame(1 + 3 * rows, 250),
+                new AnimationFrame(2 + 3 * rows, 150),
             ]),
             jump: new Animation([
-                new AnimationFrame(0 + 2 * rows, .3),
-                new AnimationFrame(1 + 2 * rows, .3),
-                new AnimationFrame(2 + 2 * rows, .3),
-                new AnimationFrame(3 + 2 * rows, .3),
+                new AnimationFrame(0 + 2 * rows, 300),
+                new AnimationFrame(1 + 2 * rows, 250),
+                new AnimationFrame(2 + 2 * rows, 200),
+                new AnimationFrame(3 + 2 * rows, 100),
             ]),
-            attack: new Animation([
-                new AnimationFrame(0 + 3 * rows, .3),
-                new AnimationFrame(1 + 3 * rows, .3),
-                new AnimationFrame(2 + 3 * rows, .3),
+            idle: new Animation([
+                new AnimationFrame(0, 150),
+                new AnimationFrame(1, 150),
+                new AnimationFrame(2, 150),
+                new AnimationFrame(3, 150),
+            ]),
+            run: new Animation([
+                new AnimationFrame(0 + 1 * rows, 120),
+                new AnimationFrame(1 + 1 * rows, 120),
+                new AnimationFrame(2 + 1 * rows, 120),
+                new AnimationFrame(3 + 1 * rows, 120),
+                new AnimationFrame(4 + 1 * rows, 120),
+                new AnimationFrame(5 + 1 * rows, 120),
             ]),
             swim: new Animation([
-                new AnimationFrame(0 + 4 * rows, .3),
-                new AnimationFrame(1 + 4 * rows, .3),
-                new AnimationFrame(2 + 4 * rows, .3),
-                new AnimationFrame(3 + 4 * rows, .3),
-                new AnimationFrame(4 + 4 * rows, .3),
-                new AnimationFrame(5 + 4 * rows, .3),
+                new AnimationFrame(0 + 4 * rows, 150),
+                new AnimationFrame(1 + 4 * rows, 150),
+                new AnimationFrame(2 + 4 * rows, 150),
+                new AnimationFrame(3 + 4 * rows, 150),
+                new AnimationFrame(4 + 4 * rows, 150),
+                new AnimationFrame(5 + 4 * rows, 150),
             ]),
+            complete: createCompleteAnimation(sprites, 150),
         }
     }
 }
 
 export default [
-    createNinjaSpriteSheet(),
     createDwarfSpriteSheet(),
+    createNinjaSpriteSheet(),
 ];
